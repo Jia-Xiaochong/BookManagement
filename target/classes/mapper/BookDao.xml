@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaxc.mapper.BookDao">
+    <update id="delOneBookByBid" parameterType="int">
+        update book set stock=stock-1 where bid=#{bid}
+    </update>
+    <update id="addOneBookByBid" parameterType="int">
+        update book set stock=stock+1 where bid=#{bid}
+    </update>
+    <select id="selectBookById" parameterType="int" resultType="com.jiaxc.pojo.Book">
+        select * from book where bid = #{bid}
+    </select>
+    <select id="selectAllBook" resultType="com.jiaxc.pojo.Book">
+        select * from book where state='正常'
+    </select>
+    <insert id="addOneBook" parameterType="Book">
+        insert into book (bookname, author, press, synopsis, tag, total, stock) values (#{bookname}, #{author}, #{press}, #{synopsis}, #{tag}, #{total}, #{total})
+    </insert>
+    <update id="delBook" parameterType="int">
+        update book set state='删除' where bid=#{bid}
+    </update>
+    <update id="editOneBook" parameterType="Book">
+        update book set bookname=#{bookname}, author=#{author}, press=#{press}, synopsis=#{synopsis}, tag=#{tag}, total=#{total}, stock=#{stock} where bid=#{bid}
+    </update>
+    <select id="getBooksByName" parameterType="string" resultType="Book">
+        select * from book where bookname like #{search}
+    </select>
+    <select id="getBooksByAuthor" parameterType="string" resultType="Book">
+        select * from book where author like #{search}
+    </select>
+    <select id="getBooksByPress" parameterType="string" resultType="Book">
+        select * from book where press like #{search}
+    </select>
+    <select id="getBooksByTag" parameterType="string" resultType="Book">
+        select * from book where tag like #{search}
+    </select>
+</mapper>

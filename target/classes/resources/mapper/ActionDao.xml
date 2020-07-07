@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaxc.mapper.ActionDao">
+
+    <resultMap id="actionMap" type="com.jiaxc.pojo.Action">
+        <id column="aid" property="aid"/>
+        <result column="uid" property="uid"/>
+        <result column="bid" property="bid"/>
+        <result column="starttime" property="starttime"/>
+        <result column="deadline" property="deadline"/>
+        <result column="state" property="state"/>
+        <association column="uid" property="user" select="com.jiaxc.mapper.UserDao.selectUserById"/>
+        <association column="bid" property="book" select="com.jiaxc.mapper.BookDao.selectBookById"/>
+    </resultMap>
+
+    <update id="returnBookAction" parameterType="Action">
+        update action set deadline=#{deadline},state=#{state} where uid=#{uid} and bid=#{bid} and state='待还'
+    </update>
+
+    <update id="returnBookDelay" parameterType="Action">
+        update action set deadline=DATE_ADD(deadline, INTERVAL 30 DAY) where uid=#{uid} and bid=#{bid} and state='待还'
+    </update>
+
+    <insert id="addAction" parameterType="Action">
+        insert into action (bid, uid, starttime, deadline) value (#{bid}, #{uid}, #{starttime}, #{deadline})
+    </insert>
+
+    <update id="updateActionByUidBid" parameterType="Action">
+        update action set state=#{state} where uid=#{uid} and bid=#{bid}
+    </update>
+
+    <select id="selectActionByAid" parameterType="int" resultMap="actionMap">
+        select * from action where aid = #{aid}
+    </select>
+
+    <select id="selectActionByBid" parameterType="int" resultMap="actionMap">
+        select * from action where bid = #{bid}
+    </select>
+
+    <select id="selectActionByUid" parameterType="int" resultMap="actionMap">
+        select * from action where uid = #{uid}
+    </select>
+
+    <select id="selectByUidBid" parameterType="com.jiaxc.pojo.Action" resultType="int">
+        select count(*) from action where uid=#{uid} and bid=#{bid} and state=#{state}
+    </select>
+
+    <select id="getNumByUid" parameterType="int" resultType="int">
+        select count(*) from action where uid=#{uid} and state='待还'
+    </select>
+</mapper>

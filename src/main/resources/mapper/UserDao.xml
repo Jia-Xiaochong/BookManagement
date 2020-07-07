@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jiaxc.mapper.UserDao">
+    <select id="selectUserById" parameterType="int" resultType="com.jiaxc.pojo.User">
+        select * from user where uid = #{uid}
+    </select>
+    <select id="selectUserByName" parameterType="string" resultType="com.jiaxc.pojo.User">
+        select * from user where username = #{username}
+    </select>
+    <select id="userLogin" parameterType="com.jiaxc.pojo.User" resultType="com.jiaxc.pojo.User">
+        select * from user where username = #{username} and password = #{password}
+    </select>
+    <insert id="addOneUser" parameterType="User">
+        insert into user (username, password, level) values (#{username}, '123456', #{level})
+    </insert>
+    <select id="getAllUser" resultType="User">
+        select * from user where state='正常'
+    </select>
+    <update id="delUser" parameterType="int">
+         update user set state='删除' where uid=#{uid}
+    </update>
+</mapper>
